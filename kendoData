@@ -1,106 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="https://demos.telerik.com/kendo-ui/grid/local-data-binding">
-    <style>html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }</style>
-    <title></title>
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.default-ocean-blue.min.css" />
+    <meta charset="utf-8" />
+    <title>Kendo UI Snippet</title>
 
-    <script src="https://kendo.cdn.telerik.com/2023.1.117/js/jquery.min.js"></script>
-    
-    
-    <script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
-    
-    
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.default-v2.min.css" />
 
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2021.3.1207/js/kendo.all.min.js"></script>
 </head>
 <body>
-
-<div id="example">
+    <h4>Kenod Grid</h4>
+    <button id="click">click</button>
     <div id="grid"></div>
-
     <script>
-        var gridData = [{
-                            ProductID : 1,
-                            ProductName : "Chai ChaiChaiChaiChaiChaiChaiChaiChaiChaiChaiChaiChaiChai  ChaiChaiChaiChaiChaiChaiChaiChaiChaiChai  ChaiChaiChaiChaiChai ChaiChaiChaiChaiChaiChaiChai ChaiChai",
-                            SupplierID : 1,
-                            CategoryID : 1,
-                            QuantityPerUnit : "10 boxes x 20 bags",
-                            UnitPrice : 18.0000,
-                            UnitsInStock : 39,
-                            UnitsOnOrder : 0,
-                            ReorderLevel : 10,
-                            Discontinued : false,
-                            Category : {
-                                CategoryID : 1,
-                                CategoryName : "Beverages",
-                                Description : "Soft drinks, coffees, teas, beers, and ales"
-                            }
-                        }, {
-                            ProductID : 2,
-                            ProductName : "Chang",
-                            SupplierID : 1,
-                            CategoryID : 1,
-                            QuantityPerUnit : "24 - 12 oz bottles",
-                            UnitPrice : 19.0000,
-                            UnitsInStock : 17,
-                            UnitsOnOrder : 40,
-                            ReorderLevel : 25,
-                            Discontinued : false,
-                            Category : {
-                                CategoryID : 1,
-                                CategoryName : "Beverages",
-                                Description : "Soft drinks, coffees, teas, beers, and ales"
-                            }
-                    }];
-        $(document).ready(function() {
-            $("#grid").kendoGrid({
-                dataSource: {
-                    data:  gridData,
-                    schema: {
-                        model: {
-                            fields: {
-                                ProductName: { type: "string" },
-                                UnitPrice: { type: "number" },
-                                UnitsInStock: { type: "number" },
-                                Discontinued: { type: "boolean" },
-                                QuantityPerUnit: { type: "string" },
-                                QuantityPerUnit: { type: "string" },
-                            }
-                        }
-                    },
-                    pageSize: 20
+        $("#click").click(function(){
+        var DataSource = new kendo.data.DataSource({
+            serverPaging: true,
+            transport: {
+                read: {
+                    url: "http://localhost:3000/data",
+                    dataType: "json",
+                    type: "get",
+                }
+            },
+            serverAggregates: true,
+            schema: {
+                data: function(res) {
+                    return res.data;
                 },
-                height: 250,
-                scrollable: true,
-                sortable: true,
-                filterable: true,
-                resizable: true,
-                pageable: {
-                    input: true,
-                    numeric: false
-                },
-                columns: [
-                    "ProductName",
-                    { field: "UnitPrice", title: "Unit Price", format: "{0:c}", width:200},
-                    { field: "UnitsInStock", title: "Units In Stock", width:300 },
-                    { field: "Discontinued", width:300},
-                    { field: "Discontinued", width:100 },
-                    { field: "Discontinued", width:100},
-                    { field: "Discontinued", width:100},
-                    { field: "Discontinued", width:100 },
-                    { field: "QuantityPerUnit", width:100},
-                    { field: "Discontinued", width:100 },
-                    { field: "QuantityPerUnit", width:100},
-                    { field: "Discontinued", width:100 },
-                    { field: "QuantityPerUnit", width:100},
-                ]
-            });
+                total: function(res) {
+                    return res.total;
+                }
+                
+            },
+            pageable: 5
         });
+
+       
+    
+        $("#grid").kendoGrid({
+        dataSource: DataSource,
+        height: '300px',
+        sortable: true,
+        filterable: true,
+        scrollable:true,
+        pageable: {
+                    refresh: true,
+                    pageSizes: [ 5, 10 , 25, 50 ],
+            },
+        });
+        
+    });
+
     </script>
-</div>
-
-
-
 </body>
 </html>
